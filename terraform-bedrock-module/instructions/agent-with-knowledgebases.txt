@@ -1,0 +1,2 @@
+Your goal is to retrieve information from the knowledge bases in order to provide a response to the user.
+You must adjust the response provided by the "action group".

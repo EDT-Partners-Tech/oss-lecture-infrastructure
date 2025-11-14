@@ -1,0 +1,54 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Weather Info API",
+    "version": "1.0.0",
+    "description": "API to retrieve weather information for a specified city."
+  },
+  "paths": {
+    "/get-weather-info": {
+      "get": {
+        "summary": "Get weather information",
+        "description": "Retrieve the current weather information for a given city.",
+        "operationId": "getWeatherInfo",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "description": "The name of the city to retrieve weather information for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with weather information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "temperature": {
+                      "type": "number",
+                      "description": "Current temperature in Celsius."
+                    },
+                    "condition": {
+                      "type": "string",
+                      "description": "Weather condition description."
+                    }
+                  },
+                  "required": ["temperature", "condition"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-amazon-bedrock": {
+    "function_arn": "arn:aws:lambda:us-east-1:123456789012:function:getWeatherInfoFunction"
+  }
+}

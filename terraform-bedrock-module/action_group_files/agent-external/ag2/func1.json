@@ -1,0 +1,26 @@
+{
+  "name": "API_GET",
+  "description": "API_GET",
+  "parameters": [
+    {
+      "name": "path",
+      "type": "string",
+      "description": "Este es el path para agregar al dominio. Por ejemplo \"users/\"",
+      "required": true
+    },
+    {
+      "name": "endpoint",
+      "type": "string",
+      "description": "Este es el endpoint de la solicitud. Por ejemplo \"https://midominio.com",
+      "required": true
+    },
+    {
+      "name": "query_params",
+      "type": "array",
+      "description": "Es una lista de los parámetros que se le agregarán a la llamada. Por ejemplo \"[\"username=pepe\", \"id=3\"]",
+      "required": true
+    }
+  ]
+}
+
+

@@ -1,0 +1,134 @@
+{
+  "Comment": "${description}",
+  "StartAt": "CreateOpensearchCollection",
+  "States": {
+    "CreateOpensearchCollection": {
+      "Type": "Task",
+      "Resource": "${lambda_arns.create_collection}",
+      "ResultSelector": {
+        "collection_id.$": "$.collection_id",
+        "collection_arn.$": "$.collection_arn"
+      },
+      "ResultPath": "$.OpensearchCollectionResult",
+      "Retry": [{
+        "ErrorEquals": ["States.ALL"],
+        "IntervalSeconds": 10,
+        "MaxAttempts": 4,
+        "BackoffRate": 2
+      }],
+      "Catch": [{
+        "ErrorEquals": ["States.ALL"],
+        "ResultPath": "$.ErrorInfo",
+        "Next": "FailState"
+      }],
+      "Next": "WaitForCollectionCreation"
+    },
+    "WaitForCollectionCreation": {
+      "Type": "Wait",
+      "Seconds": 60,
+      "Next": "CreateOpensearchVectorIndex"
+    },
+    "CreateOpensearchVectorIndex": {
+      "Type": "Task",
+      "Resource": "${lambda_arns.create_index}",
+      "Parameters": {
+        "course_id.$": "$.course_id",
+        "collection_id.$": "$.OpensearchCollectionResult.collection_id",
+        "collection_arn.$": "$.OpensearchCollectionResult.collection_arn"
+      },
+      "ResultSelector": {
+        "course_id.$": "$.course_id",
+        "collection_arn.$": "$.collection_arn"
+      },
+      "ResultPath": "$.OpensearchVectorIndexResult",
+      "Retry": [{
+        "ErrorEquals": ["States.ALL"],
+        "IntervalSeconds": 15,
+        "MaxAttempts": 4,
+        "BackoffRate": 2
+      }],
+      "Catch": [{
+        "ErrorEquals": ["States.ALL"],
+        "ResultPath": "$.ErrorInfo",
+        "Next": "FailState"
+      }],
+      "Next": "WaitForVectorIndexCreation"
+    },
+    "WaitForVectorIndexCreation": {
+      "Type": "Wait",
+      "Seconds": 20,
+      "Next": "CreateBedrockKnowledgeBase"
+    },
+    "CreateBedrockKnowledgeBase": {
+      "Type": "Task",
+      "Resource": "${lambda_arns.create_kb}",
+      "Parameters": {
+        "course_id.$": "$.course_id",
+        "collection_arn.$": "$.OpensearchCollectionResult.collection_arn"
+      },
+      "ResultSelector": {
+        "knowledge_base_id.$": "$.knowledge_base_id"
+      },
+      "ResultPath": "$.BedrockKnowledgeBaseResult",
+      "Retry": [{
+        "ErrorEquals": ["States.ALL"],
+        "IntervalSeconds": 30,
+        "MaxAttempts": 3,
+        "BackoffRate": 2
+      }],
+      "Catch": [{
+        "ErrorEquals": ["States.ALL"],
+        "ResultPath": "$.ErrorInfo",
+        "Next": "FailState"
+      }],
+      "Next": "WaitForKnowledgeBaseCreation"
+    },
+    "WaitForKnowledgeBaseCreation": {
+      "Type": "Wait",
+      "Seconds": 5,
+      "Next": "CreateKnowledgeBaseDataSource"
+    },
+    "CreateKnowledgeBaseDataSource": {
+      "Type": "Task",
+      "Resource": "${lambda_arns.create_data_source}",
+      "Parameters": {
+        "course_id.$": "$.course_id",
+        "knowledge_base_id.$": "$.BedrockKnowledgeBaseResult.knowledge_base_id"
+      },
+      "ResultSelector": {
+        "data_source_id.$": "$.data_source_id"
+      },
+      "ResultPath": "$.DataSourceResult",
+      "Retry": [{
+        "ErrorEquals": ["States.ALL"],
+        "IntervalSeconds": 20,
+        "MaxAttempts": 3,
+        "BackoffRate": 2
+      }],
+      "Catch": [{
+        "ErrorEquals": ["States.ALL"],
+        "ResultPath": "$.ErrorInfo",
+        "Next": "FailState"
+      }],
+      "Next": "AggregateResults"
+    },
+    "AggregateResults": {
+      "Type": "Pass",
+      "InputPath": "$",
+      "ResultPath": "$",
+      "Parameters": {
+        "course_id.$": "$.course_id",
+        "collection_id.$": "$.OpensearchCollectionResult.collection_id",
+        "collection_arn.$": "$.OpensearchCollectionResult.collection_arn",
+        "knowledge_base_id.$": "$.BedrockKnowledgeBaseResult.knowledge_base_id",
+        "data_source_id.$": "$.DataSourceResult.data_source_id"
+      },
+      "End": true
+    },
+    "FailState": {
+      "Type": "Fail",
+      "Error": "WorkflowFailure",
+      "Cause": "An error occurred during execution."
+    }
+  }
+}

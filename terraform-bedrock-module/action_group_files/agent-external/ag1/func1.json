@@ -1,0 +1,12 @@
+{
+  "name": "Chatbot_context",
+  "description": "Chatbot_context",
+  "parameters": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Indica el ID para obtener la información sobre el contexto del chat. Este parámetro es un UUID dado como parámetro.",
+      "required": true
+    }
+  ]
+}

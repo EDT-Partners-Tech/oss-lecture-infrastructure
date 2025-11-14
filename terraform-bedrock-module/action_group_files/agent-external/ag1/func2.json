@@ -1,0 +1,24 @@
+{
+  "name": "knowledge_base_question",
+  "description": "Se usa para obtener información de la knowledgebase",
+  "parameters": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Este es el id de la conversación. Este parámetro es dado por el usuario mediante la etiqueta <ID>UUID</ID>",
+      "required": true
+    },
+    {
+      "name": "filters",
+      "type": "string",
+      "description": "Estos son los filtros para aplicar al buscar información, estos datos son dados en 'settings.knowledge_base_filter_structure' y se debe pedir información de cada uno de estos ítems al usuario. Por ejemplo, si se pide la 'comunidad' y el usuario indica 'Madrid', se debe enviar ['comunidad=madrid'].",
+      "required": true
+    },
+    {
+      "name": "prompt",
+      "type": "string",
+      "description": "Descripción de lo que se quiere saber de la base de conocimiento. No se debe usar para saludar al usuario.",
+      "required": true
+    }
+  ]
+}

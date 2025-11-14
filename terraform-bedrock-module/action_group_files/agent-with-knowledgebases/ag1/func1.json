@@ -1,0 +1,21 @@
+
+{
+  "name": "knowledgebase",
+  "description": "Use this action group to get information from knowledge base.",
+  "parameters": [
+    {
+      "name": "query",
+      "type": "string",
+      "description": "Query to response the user question. Example: Give me all the information about 'formula 1'",
+      "required": true
+    },
+    {
+      "name": "description",
+      "type": "array",
+      "description": "A set of tags that will help you find a better context. Give at least 4 items.",
+      "required": true
+    }
+  ]
+}
+
+

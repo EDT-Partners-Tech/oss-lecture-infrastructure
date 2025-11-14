@@ -1,0 +1,44 @@
+{
+  "QueryLanguage": "JSONPath",
+  "Comment": "Testing state machine for preprocessing transcripts",
+  "StartAt": "MapTranscriptions",
+  "States": {
+    "MapTranscriptions": {
+      "Type": "Map",
+      "ItemsPath": "$.files",
+      "Parameters": {
+        "fileUri.$": "$$.Map.Item.Value.fileUri",
+        "materialId.$": "$$.Map.Item.Value.materialId",
+        "courseId.$": "$.courseId"
+      },
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "StartTranscriptionJob",
+        "States": {
+          "StartTranscriptionJob": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+            "HeartbeatSeconds": 300,
+            "Parameters": {
+              "FunctionName":  "${lambda_arns.create_collection}:$LATEST",
+              "Payload": {
+                "fileUri.$": "$.fileUri",
+                "materialId.$": "$.materialId",
+                "courseId.$": "$.courseId",
+                "taskToken.$": "$$.Task.Token"
+              }
+            },
+            "End": true
+          }
+        }
+      },
+      "MaxConcurrency": 2,
+      "Next": "FlowEnd"
+    },
+    "FlowEnd": {
+      "Type": "Succeed"
+    }
+  }
+}
