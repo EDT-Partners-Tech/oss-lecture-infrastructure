@@ -128,7 +128,7 @@ For operational issues, see the [Operations Runbook](docs/operations/runbook.md)
 
 ## 📄 License
 
-This infrastructure code is proprietary and confidential. Unauthorized use is prohibited.
+This infrastructure code is free to use under the [Creative Commons 4.0 license](License.txt)
 
 ---
 
