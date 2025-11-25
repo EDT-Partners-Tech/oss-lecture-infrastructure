@@ -1,4 +1,19 @@
-<!-- © [2025] EDT&Partners. Licensed under CC BY 4.0. -->
+<!-- 
+  Copyright 2025 EDT&Partners
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
 # Lecture Infrastructure
 
 A comprehensive Terraform-based Infrastructure as Code (IaC) solution for managing multi-tenant lecture and educational platform infrastructure on AWS.
@@ -126,9 +141,11 @@ Please see [CONTRIBUTING.md](docs/development/CONTRIBUTING.md) for development g
 
 For operational issues, see the [Operations Runbook](docs/operations/runbook.md) or contact the infrastructure team.
 
-## 📄 License
 
-This infrastructure code is free to use under the [Creative Commons 4.0 license](License.txt)
+### 📄 License Change (November 24, 2025)
+
+This project was originally released under the **CC BY 4.0** license.  
+As of **November 24, 2025**, all source code in this repository is licensed under the [Apache License 2.0](License.txt).
 
 ---
 
